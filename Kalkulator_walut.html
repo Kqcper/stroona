@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kalkulator walut</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 5px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator walut</h1>
+        
+        <div class="form-group">
+            <label for="amount">Kwota:</label>
+            <input type="number" id="amount" placeholder="Wprowadź kwotę" />
+        </div>
+        
+        <div class="form-group">
+            <label for="from">Z:</label>
+            <select id="from">
+                <option value="USD">USA (USD)</option>
+                <option value="PLN">Polska (PLN)</option>
+                <option value="EUR">Niemcy (EUR)</option>
+                <option value="CZK">Czechy (CZK)</option>
+                <option value="SEK">Szwecja (SEK)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="to">Na:</label>
+            <select id="to">
+                <option value="USD">USA (USD)</option>
+                <option value="PLN">Polska (PLN)</option>
+                <option value="EUR">Niemcy (EUR)</option>
+                <option value="CZK">Czechy (CZK)</option>
+                <option value="SEK">Szwecja (SEK)</option>
+            </select>
+        </div>
+        
+        <button onclick="convertCurrency()">Przelicz</button>
+        
+        <div class="result" id="result"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function convertCurrency() {
+            var amount = document.getElementById('amount').value;
+            var from = document.getElementById('from').value;
+            var to = document.getElementById('to').value;
+            
+            var apiUrl = 'https://api.exchangerate-api.com/v4/latest/' + from;
+            
+            axios.get(apiUrl)
+                .then(function(response) {
+                    var rates = response.data.rates;
+                    var rate = rates[to];
+                    var result = amount * rate;
+                    
+                    document.getElementById('result').textContent = result.toFixed(2) + ' ' + to;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
+    </script>
+</body>
+</html>
